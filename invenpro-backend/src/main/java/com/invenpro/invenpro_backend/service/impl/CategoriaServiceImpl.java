@@ -1,6 +1,7 @@
 package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.CategoriaDto;
+import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
 import com.invenpro.invenpro_backend.mapper.CategoriaMapper;
 import com.invenpro.invenpro_backend.model.entity.Categoria;
 import com.invenpro.invenpro_backend.repository.CategoriaRepository;
@@ -28,14 +29,14 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public CategoriaDto buscarPorId(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Categoria no encontrada con id: " + id));
         return categoriaMapper.toDto(categoria);
     }
 
     @Override
     public CategoriaDto crear(CategoriaDto categoriaDto) {
         Categoria categoria = categoriaMapper.toEntity(categoriaDto);
-        categoria.setId(null); // aseguramos que sea un insert, no un update
+        categoria.setId(null);
         Categoria guardada = categoriaRepository.save(categoria);
         return categoriaMapper.toDto(guardada);
     }
@@ -43,7 +44,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public CategoriaDto actualizar(Long id, CategoriaDto categoriaDto) {
         Categoria existente = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Categoria no encontrada con id: " + id));
 
         existente.setNombre(categoriaDto.getNombre());
         existente.setDescripcion(categoriaDto.getDescripcion());
@@ -55,7 +56,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public void eliminar(Long id) {
         if (!categoriaRepository.existsById(id)) {
-            throw new RuntimeException("Categoria no encontrada con id: " + id);
+            throw new RecursoNoEncontradoException("Categoria no encontrada con id: " + id);
         }
         categoriaRepository.deleteById(id);
     }
