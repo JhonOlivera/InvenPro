@@ -122,3 +122,4 @@ Este proyecto sigue buenas prácticas de control de versiones:
 **Jhon Edwin Olivera Duarte**
 Estudiante de Ingeniería de Sistemas — Universidad de Ibagué
 [GitHub](https://github.com/JhonOlivera) · [LinkedIn](https://linkedin.com/in/jhon-edwin-olivera-duarte-25a05b344)
+
