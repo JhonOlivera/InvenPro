@@ -1,6 +1,7 @@
 package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.ProveedorDto;
+import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
 import com.invenpro.invenpro_backend.mapper.ProveedorMapper;
 import com.invenpro.invenpro_backend.model.entity.Proveedor;
 import com.invenpro.invenpro_backend.repository.ProveedorRepository;
@@ -28,7 +29,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     public ProveedorDto buscarPorId(Long id) {
         Proveedor proveedor = proveedorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Proveedor no encontrado con id: " + id));
         return proveedorMapper.toDto(proveedor);
     }
 
@@ -43,7 +44,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     public ProveedorDto actualizar(Long id, ProveedorDto proveedorDto) {
         Proveedor existente = proveedorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Proveedor no encontrado con id: " + id));
 
         existente.setNombre(proveedorDto.getNombre());
         existente.setTelefono(proveedorDto.getTelefono());
@@ -56,7 +57,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     public void eliminar(Long id) {
         if (!proveedorRepository.existsById(id)) {
-            throw new RuntimeException("Proveedor no encontrado con id: " + id);
+            throw new RecursoNoEncontradoException("Proveedor no encontrado con id: " + id);
         }
         proveedorRepository.deleteById(id);
     }

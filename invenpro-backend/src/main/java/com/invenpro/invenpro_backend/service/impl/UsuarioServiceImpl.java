@@ -1,6 +1,8 @@
 package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.UsuarioDto;
+import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
+import com.invenpro.invenpro_backend.exception.ReglaDeNegocioException;
 import com.invenpro.invenpro_backend.mapper.UsuarioMapper;
 import com.invenpro.invenpro_backend.model.entity.Usuario;
 import com.invenpro.invenpro_backend.repository.UsuarioRepository;
@@ -30,14 +32,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioDto buscarPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con id: " + id));
         return usuarioMapper.toDto(usuario);
     }
 
     @Override
     public UsuarioDto crear(UsuarioDto usuarioDto) {
         if (usuarioRepository.findByEmail(usuarioDto.getEmail()).isPresent()) {
-            throw new RuntimeException("Ya existe un usuario con el email: " + usuarioDto.getEmail());
+            throw new ReglaDeNegocioException("Ya existe un usuario con el email: " + usuarioDto.getEmail());
         }
 
         Usuario usuario = usuarioMapper.toEntity(usuarioDto);
@@ -51,7 +53,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioDto actualizar(Long id, UsuarioDto usuarioDto) {
         Usuario existente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con id: " + id));
 
         existente.setNombre(usuarioDto.getNombre());
         existente.setEmail(usuarioDto.getEmail());
@@ -68,7 +70,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void eliminar(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
+            throw new RecursoNoEncontradoException("Usuario no encontrado con id: " + id);
         }
         usuarioRepository.deleteById(id);
     }

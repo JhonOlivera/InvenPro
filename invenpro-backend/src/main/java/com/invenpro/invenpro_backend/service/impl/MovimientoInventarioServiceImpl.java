@@ -1,6 +1,8 @@
 package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.MovimientoInventarioDto;
+import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
+import com.invenpro.invenpro_backend.exception.ReglaDeNegocioException;
 import com.invenpro.invenpro_backend.mapper.MovimientoInventarioMapper;
 import com.invenpro.invenpro_backend.model.entity.MovimientoInventario;
 import com.invenpro.invenpro_backend.model.entity.Producto;
@@ -44,16 +46,16 @@ public class MovimientoInventarioServiceImpl implements MovimientoInventarioServ
     @Transactional
     public MovimientoInventarioDto registrar(MovimientoInventarioDto movimientoDto, String emailUsuario) {
         Producto producto = productoRepository.findById(movimientoDto.getProductoId())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + movimientoDto.getProductoId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado con id: " + movimientoDto.getProductoId()));
 
         Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + emailUsuario));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con email: " + emailUsuario));
 
         int cantidad = movimientoDto.getCantidad();
 
         if (movimientoDto.getTipo() == MovimientoInventario.TipoMovimiento.SALIDA) {
             if (producto.getStock() < cantidad) {
-                throw new RuntimeException(
+                throw new ReglaDeNegocioException(
                         "Stock insuficiente. Stock actual: " + producto.getStock() + ", cantidad solicitada: " + cantidad
                 );
             }

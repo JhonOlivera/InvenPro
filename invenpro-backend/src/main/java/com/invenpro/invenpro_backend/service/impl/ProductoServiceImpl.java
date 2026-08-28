@@ -1,6 +1,7 @@
 package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.ProductoDto;
+import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
 import com.invenpro.invenpro_backend.mapper.ProductoMapper;
 import com.invenpro.invenpro_backend.model.entity.Categoria;
 import com.invenpro.invenpro_backend.model.entity.Producto;
@@ -34,16 +35,16 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoDto buscarPorId(Long id) {
         Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado con id: " + id));
         return productoMapper.toDto(producto);
     }
 
     @Override
     public ProductoDto crear(ProductoDto productoDto) {
         Categoria categoria = categoriaRepository.findById(productoDto.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada con id: " + productoDto.getCategoriaId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Categoria no encontrada con id: " + productoDto.getCategoriaId()));
         Proveedor proveedor = proveedorRepository.findById(productoDto.getProveedorId())
-                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id: " + productoDto.getProveedorId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Proveedor no encontrado con id: " + productoDto.getProveedorId()));
 
         Producto producto = productoMapper.toEntity(productoDto, categoria, proveedor);
         producto.setId(null);
@@ -54,12 +55,12 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoDto actualizar(Long id, ProductoDto productoDto) {
         Producto existente = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado con id: " + id));
 
         Categoria categoria = categoriaRepository.findById(productoDto.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada con id: " + productoDto.getCategoriaId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Categoria no encontrada con id: " + productoDto.getCategoriaId()));
         Proveedor proveedor = proveedorRepository.findById(productoDto.getProveedorId())
-                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id: " + productoDto.getProveedorId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Proveedor no encontrado con id: " + productoDto.getProveedorId()));
 
         existente.setNombre(productoDto.getNombre());
         existente.setDescripcion(productoDto.getDescripcion());
@@ -76,7 +77,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public void eliminar(Long id) {
         if (!productoRepository.existsById(id)) {
-            throw new RuntimeException("Producto no encontrado con id: " + id);
+            throw new RecursoNoEncontradoException("Producto no encontrado con id: " + id);
         }
         productoRepository.deleteById(id);
     }
