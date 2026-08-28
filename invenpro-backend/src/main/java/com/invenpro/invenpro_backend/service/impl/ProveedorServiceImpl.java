@@ -2,8 +2,10 @@ package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.ProveedorDto;
 import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
+import com.invenpro.invenpro_backend.exception.ReglaDeNegocioException;
 import com.invenpro.invenpro_backend.mapper.ProveedorMapper;
 import com.invenpro.invenpro_backend.model.entity.Proveedor;
+import com.invenpro.invenpro_backend.repository.ProductoRepository;
 import com.invenpro.invenpro_backend.repository.ProveedorRepository;
 import com.invenpro.invenpro_backend.service.ProveedorService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ProveedorServiceImpl implements ProveedorService {
 
     private final ProveedorRepository proveedorRepository;
+    private final ProductoRepository productoRepository;
     private final ProveedorMapper proveedorMapper;
 
     @Override
@@ -58,6 +61,9 @@ public class ProveedorServiceImpl implements ProveedorService {
     public void eliminar(Long id) {
         if (!proveedorRepository.existsById(id)) {
             throw new RecursoNoEncontradoException("Proveedor no encontrado con id: " + id);
+        }
+        if (productoRepository.existsByProveedorId(id)) {
+            throw new ReglaDeNegocioException("No se puede eliminar el proveedor porque tiene productos asociados");
         }
         proveedorRepository.deleteById(id);
     }
