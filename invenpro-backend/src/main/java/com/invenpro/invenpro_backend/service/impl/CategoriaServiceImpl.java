@@ -2,9 +2,11 @@ package com.invenpro.invenpro_backend.service.impl;
 
 import com.invenpro.invenpro_backend.dto.CategoriaDto;
 import com.invenpro.invenpro_backend.exception.RecursoNoEncontradoException;
+import com.invenpro.invenpro_backend.exception.ReglaDeNegocioException;
 import com.invenpro.invenpro_backend.mapper.CategoriaMapper;
 import com.invenpro.invenpro_backend.model.entity.Categoria;
 import com.invenpro.invenpro_backend.repository.CategoriaRepository;
+import com.invenpro.invenpro_backend.repository.ProductoRepository;
 import com.invenpro.invenpro_backend.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final ProductoRepository productoRepository;
     private final CategoriaMapper categoriaMapper;
 
     @Override
@@ -57,6 +60,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     public void eliminar(Long id) {
         if (!categoriaRepository.existsById(id)) {
             throw new RecursoNoEncontradoException("Categoria no encontrada con id: " + id);
+        }
+        if (productoRepository.existsByCategoriaId(id)) {
+            throw new ReglaDeNegocioException("No se puede eliminar la categoria porque tiene productos asociados");
         }
         categoriaRepository.deleteById(id);
     }
