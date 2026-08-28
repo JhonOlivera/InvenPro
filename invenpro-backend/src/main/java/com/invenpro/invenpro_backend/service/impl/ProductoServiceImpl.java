@@ -11,6 +11,8 @@ import com.invenpro.invenpro_backend.repository.ProductoRepository;
 import com.invenpro.invenpro_backend.repository.ProveedorRepository;
 import com.invenpro.invenpro_backend.service.ProductoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,12 @@ public class ProductoServiceImpl implements ProductoService {
                 .stream()
                 .map(productoMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public Page<ProductoDto> listarPaginado(Pageable pageable) {
+        return productoRepository.findAll(pageable)
+                .map(productoMapper::toDto);
     }
 
     @Override
