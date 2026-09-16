@@ -1,0 +1,24 @@
+<h2>Categorías</h2>
+
+@if (cargando()) {
+  <p>Cargando categorías...</p>
+} @else if (error()) {
+  <p style="color: var(--color-red-text);">{{ error() }}</p>
+} @else if (categorias().length === 0) {
+  <p>No hay categorías registradas todavía.</p>
+} @else {
+  <table style="width: 100%; border-collapse: collapse;">
+    <tr style="border-bottom: 0.5px solid var(--color-border);">
+      <td style="padding: 10px; color: var(--color-text-muted);">ID</td>
+      <td style="padding: 10px; color: var(--color-text-muted);">Nombre</td>
+      <td style="padding: 10px; color: var(--color-text-muted);">Descripción</td>
+    </tr>
+    @for (categoria of categorias(); track categoria.id) {
+      <tr style="border-bottom: 0.5px solid var(--color-border);">
+        <td style="padding: 10px; font-family: var(--font-mono);">{{ categoria.id }}</td>
+        <td style="padding: 10px;">{{ categoria.nombre }}</td>
+        <td style="padding: 10px;">{{ categoria.descripcion }}</td>
+      </tr>
+    }
+  </table>
+}
