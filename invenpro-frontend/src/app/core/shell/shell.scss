@@ -8,6 +8,8 @@
   background: var(--color-ink);
   flex-shrink: 0;
   padding: 20px 0;
+  display: flex;
+  flex-direction: column;
 
   &__brand {
     color: var(--color-paper);
@@ -34,6 +36,49 @@
 
     &.active {
       color: var(--color-paper);
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding: 16px 20px 0;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__user {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__user-name {
+    color: var(--color-paper);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__user-rol {
+    color: rgba(247, 245, 240, 0.6);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__logout {
+    background: none;
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    color: rgba(247, 245, 240, 0.85);
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
       background: rgba(255, 255, 255, 0.08);
     }
   }

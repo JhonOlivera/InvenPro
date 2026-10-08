@@ -2,13 +2,22 @@
   <aside class="sidebar">
     <div class="sidebar__brand">InvenPro</div>
     <nav class="sidebar__nav">
-      @for (item of navItems; track item.route) {
+      @for (item of navItemsVisibles(); track item.route) {
         <a [routerLink]="item.route" routerLinkActive="active" class="sidebar__link">
           <i class="ti ti-{{ item.icon }}"></i>
           <span>{{ item.label }}</span>
         </a>
       }
     </nav>
+    <div class="sidebar__footer">
+      @if (usuario()) {
+        <div class="sidebar__user">
+          <span class="sidebar__user-name">{{ usuario()!.nombre }}</span>
+          <span class="sidebar__user-rol">{{ usuario()!.rol }}</span>
+        </div>
+      }
+      <button type="button" class="sidebar__logout" (click)="logout()">Cerrar sesión</button>
+    </div>
   </aside>
   <main class="content">
     <router-outlet />
