@@ -1,1 +1,59 @@
-<p>producto-list works!</p>
+<div class="page-header">
+  <h2>Productos</h2>
+  <a routerLink="/productos/nuevo" class="btn btn--primary">Nuevo producto</a>
+</div>
+
+@if (errorEliminar()) {
+  <p class="banner-error">{{ errorEliminar() }}</p>
+}
+
+@if (cargando()) {
+  <p class="state-message">Cargando productos...</p>
+} @else if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else if (productos().length === 0) {
+  <p class="state-message">No hay productos registrados todavía.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="mono">ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Proveedor</th>
+        <th class="mono">Precio</th>
+        <th class="mono">Stock</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (producto of productos(); track producto.id) {
+        <tr>
+          <td class="mono">{{ producto.id }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.categoriaNombre }}</td>
+          <td>{{ producto.proveedorNombre }}</td>
+          <td class="mono">{{ producto.precio | number: '1.2-2' }}</td>
+          <td class="mono">{{ producto.stock }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.badge--amber]="estadoStock(producto) === 'bajo'"
+              [class.badge--red]="estadoStock(producto) === 'agotado'"
+            >{{ etiquetaEstadoStock(producto) }}</span>
+          </td>
+          <td class="table__acciones">
+            <a [routerLink]="['/productos', producto.id, 'editar']" class="btn btn--sm">Editar</a>
+            <button
+              type="button"
+              class="btn btn--sm btn--danger"
+              [disabled]="eliminandoId() === producto.id"
+              (click)="eliminar(producto)"
+            >Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

@@ -1,0 +1,71 @@
+<div class="page-header">
+  <h2>{{ modoEdicion ? 'Editar producto' : 'Nuevo producto' }}</h2>
+</div>
+
+@if (cargando()) {
+  <p class="state-message">Cargando producto...</p>
+} @else {
+  <form class="form-card" (ngSubmit)="onSubmit()">
+    @if (errores().length > 0) {
+      <div class="form-errors">
+        <ul>
+          @for (mensaje of errores(); track mensaje) {
+            <li>{{ mensaje }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <label class="form-field">
+      Nombre
+      <input type="text" name="nombre" [(ngModel)]="producto.nombre" required maxlength="150" />
+    </label>
+
+    <label class="form-field">
+      Descripción
+      <textarea name="descripcion" [(ngModel)]="producto.descripcion" maxlength="255"></textarea>
+    </label>
+
+    <label class="form-field">
+      Categoría
+      <select name="categoriaId" [(ngModel)]="producto.categoriaId">
+        <option [ngValue]="0">Selecciona una categoría</option>
+        @for (categoria of categorias(); track categoria.id) {
+          <option [ngValue]="categoria.id">{{ categoria.nombre }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="form-field">
+      Proveedor
+      <select name="proveedorId" [(ngModel)]="producto.proveedorId">
+        <option [ngValue]="0">Selecciona un proveedor</option>
+        @for (proveedor of proveedores(); track proveedor.id) {
+          <option [ngValue]="proveedor.id">{{ proveedor.nombre }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="form-field">
+      Precio
+      <input type="number" name="precio" [(ngModel)]="producto.precio" required min="0" step="0.01" />
+    </label>
+
+    <label class="form-field">
+      Stock
+      <input type="number" name="stock" [(ngModel)]="producto.stock" required min="0" step="1" />
+    </label>
+
+    <label class="form-field">
+      Stock mínimo
+      <input type="number" name="stockMinimo" [(ngModel)]="producto.stockMinimo" required min="0" step="1" />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <a routerLink="/productos" class="btn btn--ghost">Cancelar</a>
+    </div>
+  </form>
+}
