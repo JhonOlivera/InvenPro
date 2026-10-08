@@ -1,1 +1,48 @@
-<p>usuario-list works!</p>
+<div class="page-header">
+  <h2>Usuarios</h2>
+  <a routerLink="/usuarios/nuevo" class="btn btn--primary">Nuevo usuario</a>
+</div>
+
+@if (errorEliminar()) {
+  <p class="banner-error">{{ errorEliminar() }}</p>
+}
+
+@if (cargando()) {
+  <p class="state-message">Cargando usuarios...</p>
+} @else if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else if (usuarios().length === 0) {
+  <p class="state-message">No hay usuarios registrados todavía.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="mono">ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (usuario of usuarios(); track usuario.id) {
+        <tr>
+          <td class="mono">{{ usuario.id }}</td>
+          <td>{{ usuario.nombre }}{{ esUsuarioActual(usuario) ? ' (tú)' : '' }}</td>
+          <td>{{ usuario.email }}</td>
+          <td><span class="badge">{{ usuario.rol }}</span></td>
+          <td class="table__acciones">
+            <a [routerLink]="['/usuarios', usuario.id, 'editar']" class="btn btn--sm">Editar</a>
+            <button
+              type="button"
+              class="btn btn--sm btn--danger"
+              [disabled]="eliminandoId() === usuario.id || esUsuarioActual(usuario)"
+              [title]="esUsuarioActual(usuario) ? 'No puedes eliminar tu propia cuenta' : ''"
+              (click)="eliminar(usuario)"
+            >Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

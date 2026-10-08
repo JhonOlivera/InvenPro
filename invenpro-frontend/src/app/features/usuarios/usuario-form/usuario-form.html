@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h2>{{ modoEdicion ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+</div>
+
+@if (cargando()) {
+  <p class="state-message">Cargando usuario...</p>
+} @else {
+  <form class="form-card" (ngSubmit)="onSubmit()">
+    @if (errores().length > 0) {
+      <div class="form-errors">
+        <ul>
+          @for (mensaje of errores(); track mensaje) {
+            <li>{{ mensaje }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <label class="form-field">
+      Nombre
+      <input type="text" name="nombre" [(ngModel)]="usuario.nombre" required maxlength="100" />
+    </label>
+
+    <label class="form-field">
+      Email
+      <input type="email" name="email" [(ngModel)]="usuario.email" required />
+    </label>
+
+    <label class="form-field">
+      {{ modoEdicion ? 'Nueva contraseña' : 'Contraseña' }}
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="usuario.password"
+        [required]="!modoEdicion"
+        minlength="6"
+        autocomplete="new-password"
+      />
+      @if (modoEdicion) {
+        <small>Déjala vacía para no cambiarla.</small>
+      }
+    </label>
+
+    <label class="form-field">
+      Rol
+      <select name="rol" [(ngModel)]="usuario.rol">
+        <option value="EMPLEADO">Empleado</option>
+        <option value="ADMIN">Administrador</option>
+      </select>
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <a routerLink="/usuarios" class="btn btn--ghost">Cancelar</a>
+    </div>
+  </form>
+}
