@@ -27,9 +27,9 @@ public class UsuarioDto {
     @Email(message = "El email debe tener un formato valido")
     private String email;
 
+    // Sin @NotBlank/@Size a propósito: en edición se deja vacía para no cambiarla
+    // (ver UsuarioServiceImpl, que valida longitud solo cuando sí se envía un valor).
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
     @NotNull(message = "El rol es obligatorio")

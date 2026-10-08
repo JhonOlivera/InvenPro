@@ -1,0 +1,110 @@
+<app-page-header
+  eyebrow="Inventario"
+  titulo="Catálogo"
+  descripcion="Explora el catálogo de productos por categoría."
+></app-page-header>
+
+@if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else {
+  <div class="catalogo">
+    <aside class="catalogo__categorias">
+      <h3>Categorías</h3>
+      <button
+        type="button"
+        class="catalogo__categoria-link"
+        [class.active]="categoriaSeleccionada() === null"
+        (click)="seleccionarCategoria(null)"
+      >Todos los productos</button>
+      @for (categoria of categorias(); track categoria.id) {
+        <button
+          type="button"
+          class="catalogo__categoria-link"
+          [class.active]="categoriaSeleccionada() === categoria.id"
+          (click)="seleccionarCategoria(categoria.id!)"
+        >{{ categoria.nombre }}</button>
+      }
+    </aside>
+
+    <section class="catalogo__contenido">
+      <div class="catalogo__toolbar">
+        <h3 class="section-title">
+          {{ tituloSeccion() }} <span class="section-title__contador">({{ productosFiltrados().length }} productos)</span>
+        </h3>
+        <input
+          type="search"
+          class="search-input"
+          placeholder="Buscar productos..."
+          [(ngModel)]="busqueda"
+        />
+      </div>
+
+      @if (cargando()) {
+        <p class="state-message">Cargando catálogo...</p>
+      } @else if (productosFiltrados().length === 0) {
+        <p class="state-message">Ningún producto coincide con la búsqueda.</p>
+      } @else {
+        <div class="catalogo__grid">
+          @for (producto of productosFiltrados(); track producto.id) {
+            <article class="producto-card">
+              <app-image-fallback [src]="producto.imagenUrl" [alt]="producto.nombre" tamano="card" />
+              <div class="producto-card__body">
+                <h4 class="producto-card__nombre">{{ producto.nombre }}</h4>
+                <p class="producto-card__precio">{{ producto.precio | number: '1.2-2' }}</p>
+                <span
+                  class="badge"
+                  [class.badge--amber]="estadoStock(producto) === 'bajo'"
+                  [class.badge--red]="estadoStock(producto) === 'agotado'"
+                >{{ etiquetaEstadoStock(producto) }}</span>
+              </div>
+              <div class="producto-card__acciones">
+                <button type="button" class="btn btn--sm" (click)="verDetalle(producto)">Detalles</button>
+                <a [routerLink]="['/productos', producto.id, 'editar']" class="btn btn--sm btn--primary">Editar</a>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </div>
+}
+
+@if (productoDetalle(); as p) {
+  <div class="modal-overlay" (click)="cerrarDetalle()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <button type="button" class="modal-card__cerrar" (click)="cerrarDetalle()" aria-label="Cerrar">
+        <i class="ti ti-x"></i>
+      </button>
+
+      <app-image-fallback [src]="p.imagenUrl" [alt]="p.nombre" tamano="card" />
+
+      <h3 class="modal-card__titulo">{{ p.nombre }}</h3>
+      @if (p.codigo) {
+        <span class="pill pill--mono">{{ p.codigo }}</span>
+      }
+      @if (p.descripcion) {
+        <p class="modal-card__descripcion">{{ p.descripcion }}</p>
+      }
+
+      <dl class="modal-card__datos">
+        <dt>Categoría</dt>
+        <dd><span class="pill pill--teal">{{ p.categoriaNombre }}</span></dd>
+        <dt>Proveedor</dt>
+        <dd>{{ p.proveedorNombre }}</dd>
+        <dt>Precio</dt>
+        <dd class="mono precio">{{ p.precio | number: '1.2-2' }}</dd>
+        <dt>Stock</dt>
+        <dd class="celda-stock">
+          <span class="mono">{{ p.stock }}</span>
+          <span
+            class="badge"
+            [class.badge--amber]="estadoStock(p) === 'bajo'"
+            [class.badge--red]="estadoStock(p) === 'agotado'"
+          >{{ etiquetaEstadoStock(p) }}</span>
+        </dd>
+      </dl>
+
+      <a [routerLink]="['/productos', p.id, 'editar']" class="btn btn--primary">Editar producto</a>
+    </div>
+  </div>
+}

@@ -1,16 +1,59 @@
 <div class="shell">
   <aside class="sidebar">
-    <div class="sidebar__brand">InvenPro</div>
+    <div class="sidebar__brand">
+      <span class="sidebar__logo"><i class="ti ti-box"></i></span>
+      <span class="sidebar__brand-texto">
+        <span class="sidebar__brand-nombre">InvenPro</span>
+        <span class="sidebar__brand-tagline">Panel de inventario</span>
+      </span>
+    </div>
+
     <nav class="sidebar__nav">
-      @for (item of navItems; track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="active" class="sidebar__link">
-          <i class="ti ti-{{ item.icon }}"></i>
-          <span>{{ item.label }}</span>
-        </a>
+      <a routerLink="/dashboard" routerLinkActive="active" class="sidebar__link">
+        <i class="ti ti-layout-dashboard"></i>
+        <span>Dashboard</span>
+      </a>
+
+      @for (grupo of gruposVisibles(); track grupo.etiqueta) {
+        <span class="sidebar__grupo-label">{{ grupo.etiqueta }}</span>
+        @for (item of grupo.items; track item.route) {
+          <a [routerLink]="item.route" routerLinkActive="active" class="sidebar__link">
+            <i class="ti ti-{{ item.icon }}"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        }
       }
     </nav>
   </aside>
-  <main class="content">
-    <router-outlet />
-  </main>
+
+  <div class="main-column">
+    <header class="topbar">
+      <h1 class="topbar__titulo">{{ tituloPagina() }}</h1>
+
+      <div class="topbar__usuario" (click)="$event.stopPropagation()">
+        <button type="button" class="topbar__usuario-btn" (click)="toggleMenu($event)">
+          <span class="topbar__avatar">{{ inicial() }}</span>
+          <span class="topbar__usuario-nombre">{{ usuario()?.nombre ?? '...' }}</span>
+          <i class="ti ti-chevron-down"></i>
+        </button>
+
+        @if (menuAbierto()) {
+          <div class="topbar__menu">
+            <div class="topbar__menu-info">
+              <strong>{{ usuario()?.nombre }}</strong>
+              <span>{{ usuario()?.rol }}</span>
+            </div>
+            <button type="button" class="topbar__menu-logout" (click)="logout()">
+              <i class="ti ti-logout"></i>
+              Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
 </div>

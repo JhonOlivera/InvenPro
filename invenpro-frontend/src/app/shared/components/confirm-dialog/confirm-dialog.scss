@@ -1,0 +1,35 @@
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 37, 48, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-card {
+  background: #FFFFFF;
+  border: 0.5px solid var(--color-border);
+  padding: 24px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+
+  &__titulo {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: var(--color-ink);
+  }
+
+  &__mensaje {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: var(--color-text-muted);
+  }
+
+  &__acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}

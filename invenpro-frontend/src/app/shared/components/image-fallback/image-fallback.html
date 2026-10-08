@@ -1,0 +1,11 @@
+<div
+  class="image-fallback"
+  [class.image-fallback--lg]="tamano() === 'lg'"
+  [class.image-fallback--card]="tamano() === 'card'"
+>
+  @if (src() && !fallo()) {
+    <img [src]="src()!" [alt]="alt()" (error)="onError()" />
+  } @else {
+    <i class="ti ti-photo" [attr.aria-label]="alt()"></i>
+  }
+</div>

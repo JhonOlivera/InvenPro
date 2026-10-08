@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h2>Registrar movimiento</h2>
+</div>
+
+@if (exito()) {
+  <p class="state-message state-message--success">{{ exito() }}</p>
+}
+
+@if (cargandoProductos()) {
+  <p class="state-message">Cargando productos...</p>
+} @else {
+  <form class="form-card" (ngSubmit)="onSubmit()">
+    @if (errores().length > 0) {
+      <div class="form-errors">
+        <ul>
+          @for (mensaje of errores(); track mensaje) {
+            <li>{{ mensaje }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <label class="form-field">
+      Producto
+      <select name="productoId" [(ngModel)]="movimiento.productoId">
+        <option [ngValue]="0">Selecciona un producto</option>
+        @for (producto of productos(); track producto.id) {
+          <option [ngValue]="producto.id">{{ producto.nombre }} (stock: {{ producto.stock }})</option>
+        }
+      </select>
+    </label>
+
+    <label class="form-field">
+      Tipo
+      <select name="tipo" [(ngModel)]="movimiento.tipo">
+        <option value="ENTRADA">Entrada</option>
+        <option value="SALIDA">Salida</option>
+      </select>
+    </label>
+
+    <label class="form-field">
+      Cantidad
+      <input type="number" name="cantidad" [(ngModel)]="movimiento.cantidad" required min="1" step="1" />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+        {{ guardando() ? 'Registrando...' : 'Registrar' }}
+      </button>
+      <a routerLink="/movimientos" class="btn btn--ghost">Ver movimientos</a>
+    </div>
+  </form>
+}

@@ -41,6 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioRepository.findByEmail(usuarioDto.getEmail()).isPresent()) {
             throw new ReglaDeNegocioException("Ya existe un usuario con el email: " + usuarioDto.getEmail());
         }
+        validarPassword(usuarioDto.getPassword(), true);
 
         Usuario usuario = usuarioMapper.toEntity(usuarioDto);
         usuario.setId(null);
@@ -59,7 +60,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         existente.setEmail(usuarioDto.getEmail());
         existente.setRol(usuarioDto.getRol());
 
-        if (usuarioDto.getPassword() != null && !usuarioDto.getPassword().isBlank()) {
+        boolean cambiaPassword = usuarioDto.getPassword() != null && !usuarioDto.getPassword().isBlank();
+        validarPassword(usuarioDto.getPassword(), false);
+        if (cambiaPassword) {
             existente.setPassword(passwordEncoder.encode(usuarioDto.getPassword()));
         }
 
@@ -73,5 +76,23 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RecursoNoEncontradoException("Usuario no encontrado con id: " + id);
         }
         usuarioRepository.deleteById(id);
+    }
+
+    /**
+     * La contraseña no tiene @NotBlank/@Size en el DTO porque en edición se
+     * deja vacía para no cambiarla. En creación sí es obligatoria; en edición
+     * solo se valida la longitud si efectivamente se envió una nueva.
+     */
+    private void validarPassword(String password, boolean obligatoria) {
+        boolean vacia = password == null || password.isBlank();
+        if (vacia) {
+            if (obligatoria) {
+                throw new ReglaDeNegocioException("La contraseña es obligatoria");
+            }
+            return;
+        }
+        if (password.length() < 6) {
+            throw new ReglaDeNegocioException("La contraseña debe tener al menos 6 caracteres");
+        }
     }
 }

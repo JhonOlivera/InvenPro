@@ -24,6 +24,8 @@ public class ProductoMapper {
                 .categoriaNombre(producto.getCategoria() != null ? producto.getCategoria().getNombre() : null)
                 .proveedorId(producto.getProveedor() != null ? producto.getProveedor().getId() : null)
                 .proveedorNombre(producto.getProveedor() != null ? producto.getProveedor().getNombre() : null)
+                .codigo(producto.getCodigo())
+                .imagenUrl(producto.getImagenUrl())
                 .build();
     }
 
@@ -40,6 +42,8 @@ public class ProductoMapper {
                 .stockMinimo(dto.getStockMinimo())
                 .categoria(categoria)
                 .proveedor(proveedor)
+                .codigo(dto.getCodigo())
+                .imagenUrl(dto.getImagenUrl())
                 .build();
     }
 }

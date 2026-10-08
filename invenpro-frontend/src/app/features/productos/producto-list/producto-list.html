@@ -1,1 +1,96 @@
-<p>producto-list works!</p>
+<app-page-header
+  eyebrow="Inventario"
+  titulo="Productos"
+  descripcion="Consulta y administra el catálogo completo de productos."
+>
+  <a routerLink="/productos/nuevo" class="btn btn--on-dark">Nuevo producto</a>
+</app-page-header>
+
+@if (errorEliminar()) {
+  <p class="banner-error">{{ errorEliminar() }}</p>
+}
+
+@if (cargando()) {
+  <p class="state-message">Cargando productos...</p>
+} @else if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else if (productos().length === 0) {
+  <p class="state-message">No hay productos registrados todavía.</p>
+} @else {
+  <div class="list-toolbar">
+    <h3 class="section-title">
+      Listado <span class="section-title__contador">({{ productosFiltrados().length }} productos)</span>
+    </h3>
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Buscar por nombre, código o categoría..."
+      [(ngModel)]="busqueda"
+    />
+  </div>
+
+  @if (productosFiltrados().length === 0) {
+    <p class="state-message">Ningún producto coincide con "{{ busqueda() }}".</p>
+  } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Código</th>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Proveedor</th>
+          <th class="mono">Precio</th>
+          <th class="mono">Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (producto of productosFiltrados(); track producto.id) {
+          <tr>
+            <td>
+              <app-image-fallback [src]="producto.imagenUrl" [alt]="producto.nombre" />
+            </td>
+            <td>
+              @if (producto.codigo) {
+                <span class="pill pill--mono">{{ producto.codigo }}</span>
+              } @else {
+                <span class="text-muted">—</span>
+              }
+            </td>
+            <td>
+              <div class="celda-producto">
+                <span class="celda-producto__nombre">{{ producto.nombre }}</span>
+                @if (producto.descripcion) {
+                  <span class="celda-producto__descripcion">{{ producto.descripcion }}</span>
+                }
+              </div>
+            </td>
+            <td><span class="pill pill--teal">{{ producto.categoriaNombre }}</span></td>
+            <td>{{ producto.proveedorNombre }}</td>
+            <td class="mono precio">{{ producto.precio | number: '1.2-2' }}</td>
+            <td>
+              <div class="celda-stock">
+                <span class="mono">{{ producto.stock }}</span>
+                <span
+                  class="badge"
+                  [class.badge--amber]="estadoStock(producto) === 'bajo'"
+                  [class.badge--red]="estadoStock(producto) === 'agotado'"
+                >{{ etiquetaEstadoStock(producto) }}</span>
+              </div>
+            </td>
+            <td class="table__acciones">
+              <a [routerLink]="['/productos', producto.id, 'editar']" class="btn btn--sm">Editar</a>
+              <button
+                type="button"
+                class="btn btn--sm btn--danger"
+                [disabled]="eliminandoId() === producto.id"
+                (click)="eliminar(producto)"
+              >Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+}

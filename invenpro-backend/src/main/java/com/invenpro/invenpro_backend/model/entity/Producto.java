@@ -49,4 +49,12 @@ public class Producto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedor_id", nullable = false)
     private Proveedor proveedor;
+
+    @Size(max = 50, message = "El codigo no puede superar los 50 caracteres")
+    @Column(unique = true, length = 50)
+    private String codigo;
+
+    @Size(max = 500, message = "La URL de la imagen no puede superar los 500 caracteres")
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
 }
