@@ -1,34 +1,67 @@
 # InvenPro
- 
+
+![Java](https://img.shields.io/badge/Java-25-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F?logo=springboot&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+
 Sistema de gestión de inventario desarrollado con Spring Boot, Angular y MySQL.
- 
-## 📋 Descripción
- 
+
+## Índice
+
+- [Descripción](#descripción)
+- [Funcionalidades](#funcionalidades)
+- [Diseño](#diseño)
+- [Tecnologías](#tecnologías)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Instalación y ejecución](#instalación-y-ejecución)
+- [Endpoints disponibles](#endpoints-disponibles)
+- [Pendientes / mejoras futuras](#pendientes--mejoras-futuras)
+- [Flujo de trabajo Git](#flujo-de-trabajo-git)
+- [Autor](#autor)
+
+## Descripción
+
 InvenPro es una aplicación fullstack para la gestión de inventario, que permite administrar productos, categorías, proveedores, movimientos de stock y usuarios con distintos niveles de acceso.
- 
-## 🚀 Tecnologías
- 
+
+## Funcionalidades
+
+- [x] Gestión de categorías de productos
+- [x] Gestión de proveedores
+- [x] Gestión de productos (código, imagen, relación a categoría y proveedor)
+- [x] Alertas de stock bajo / agotado
+- [x] Movimientos de inventario (entradas / salidas) con ajuste automático de stock
+- [x] Gestión de usuarios con roles (Admin / Empleado)
+- [x] Dashboard con métricas reales (productos, proveedores, stock bajo, movimientos recientes)
+- [x] Catálogo visual de productos con búsqueda y filtro por categoría
+- [ ] Imágenes de producto en un hosting definitivo (hoy acepta cualquier URL) y despliegue
+
+## Diseño
+
+La interfaz sigue un sistema de diseño propio, centralizado en `invenpro-frontend/src/styles.scss`:
+
+- **Paleta teal** — sidebar y barra superior en `#0B1F26`, acento primario `#0E8F8A`, banners de página con gradiente `#0B1F26 → #0E7C86`.
+- **Color con significado** — los precios siempre van en verde (`#1E9E5A`); ámbar y rojo están reservados exclusivamente para el estado del stock (bajo / agotado), nunca se usan para otra cosa.
+- **Tablas densas**, fuente monoespaciada para código de producto y cantidades, sin tarjetas redondeadas genéricas.
+- **Componentes compartidos**: `PageHeader` (banner de cada página), `ConfirmDialog` (confirmaciones de borrado), `ImageFallback` (placeholder automático si una imagen de producto no carga o no tiene URL).
+
+## Tecnologías
+
 **Backend**
 - Java 25
 - Spring Boot 4.1.1
 - Spring Data JPA
-- Spring Security
+- Spring Security (HTTP Basic)
 - MySQL
 - Lombok
 - Maven
+
 **Frontend**
 - Angular 21 (standalone components, signals, control flow `@if`/`@for`)
 - TypeScript
-## ✨ Funcionalidades
 
-- [x] Gestión de categorías de productos
-- [x] Gestión de proveedores
-- [x] Gestión de productos (con relación a categoría y proveedor)
-- [x] Alertas de stock bajo
-- [x] Gestión de usuarios con roles (Admin / Empleado)
-- [x] Movimientos de inventario (entradas / salidas)
-- [x] Frontend en Angular (CRUD completo de las 5 entidades + dashboard)
-## 📁 Estructura del proyecto
+## Estructura del proyecto
 
 ```
 InvenPro/
@@ -45,9 +78,10 @@ InvenPro/
         ├── core/shell/    # Shell, AuthService, guards (auth/admin), interceptor
         ├── shared/        # Modelos, servicios y componentes reutilizables
         └── features/      # Un directorio por entidad: list, form y service
+                            # (+ catalogo y dashboard, que no son CRUD)
 ```
 
-## ⚙️ Instalación y ejecución
+## Instalación y ejecución
 
 ### Requisitos previos
 
@@ -59,69 +93,73 @@ InvenPro/
 ### Backend
 
 1. Clona el repositorio:
-```bash
+   ```bash
    git clone https://github.com/JhonOlivera/InvenPro.git
    cd InvenPro/invenpro-backend
-```
+   ```
 
 2. Crea la base de datos en MySQL:
-```sql
+   ```sql
    CREATE DATABASE IF NOT EXISTS invenpro
      CHARACTER SET utf8mb4
      COLLATE utf8mb4_unicode_ci;
-```
+   ```
 
 3. Configura tus credenciales en `src/main/resources/application.properties`:
-```properties
+   ```properties
    spring.datasource.url=jdbc:mysql://localhost:3306/invenpro
    spring.datasource.username=root
    spring.datasource.password=TU_PASSWORD
-```
+   ```
 
 4. Ejecuta el proyecto:
-```bash
+   ```bash
    ./mvnw spring-boot:run
-```
+   ```
 
-   El backend quedará disponible en `http://localhost:8080`. En el primer arranque se crea automáticamente un usuario ADMIN de prueba:
+   El backend queda disponible en `http://localhost:8080`. En el primer arranque se crea automáticamente un usuario ADMIN y 20 productos de ejemplo (ver `DataInitializer`):
 
    ```
    email: admin@invenpro.com
    password: admin123
    ```
 
+   > ⚠️ Esas credenciales son solo para desarrollo. Antes de desplegar en un entorno real, cámbialas o elimina el seed de `DataInitializer`.
+
 ### Frontend
 
 El backend solo permite CORS desde `http://localhost:4200`, así que el frontend **debe** levantarse en ese puerto exacto.
 
 1. Instala las dependencias:
-```bash
+   ```bash
    cd InvenPro/invenpro-frontend
    npm install
-```
+   ```
 
 2. (Opcional) Revisa la URL de la API en `src/environments/environment.ts` — por defecto apunta a `http://localhost:8080/api`.
 
 3. Ejecuta el servidor de desarrollo:
-```bash
+   ```bash
    ng serve --port 4200
-```
+   ```
 
-   La aplicación quedará disponible en `http://localhost:4200`. Inicia sesión con el usuario ADMIN de prueba (o el que hayas creado) — la autenticación es HTTP Basic, sin tokens ni refresh.
+   La aplicación queda disponible en `http://localhost:4200`. Inicia sesión con el usuario ADMIN de prueba (o el que hayas creado) — la autenticación es HTTP Basic, sin tokens ni refresh.
 
 4. Antes de dar por cerrado cualquier cambio en el frontend, verifica que compile:
-```bash
+   ```bash
    ng build
-```
+   ```
 
-## 🔌 Endpoints disponibles
+## Endpoints disponibles
 
 ### Autenticación — `/api/auth` (HTTP Basic)
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/auth/me` | Datos del usuario autenticado (nombre, email, rol) | Cualquiera autenticado |
 
 ### Categorías — `/api/categorias`
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/categorias` | Listar todas | Cualquiera autenticado |
@@ -131,6 +169,7 @@ El backend solo permite CORS desde `http://localhost:4200`, así que el frontend
 | DELETE | `/api/categorias/{id}` | Eliminar (409 si tiene productos asociados) | Cualquiera autenticado |
 
 ### Proveedores — `/api/proveedores`
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/proveedores` | Listar todos | Cualquiera autenticado |
@@ -140,6 +179,7 @@ El backend solo permite CORS desde `http://localhost:4200`, así que el frontend
 | DELETE | `/api/proveedores/{id}` | Eliminar (409 si tiene productos asociados) | Cualquiera autenticado |
 
 ### Productos — `/api/productos`
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/productos` | Listar todos | Cualquiera autenticado |
@@ -151,6 +191,7 @@ El backend solo permite CORS desde `http://localhost:4200`, así que el frontend
 | GET | `/api/productos/stock-bajo` | Productos con stock ≤ stock mínimo | Cualquiera autenticado |
 
 ### Movimientos de inventario — `/api/movimientos`
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/movimientos` | Listar todos | Cualquiera autenticado |
@@ -160,6 +201,7 @@ El backend solo permite CORS desde `http://localhost:4200`, así que el frontend
 No hay `PUT`/`DELETE`: es un registro de auditoría inmutable por diseño.
 
 ### Usuarios — `/api/usuarios`
+
 | Método | Endpoint | Descripción | Rol |
 |---|---|---|---|
 | GET | `/api/usuarios` | Listar todos | **ADMIN** |
@@ -170,8 +212,9 @@ No hay `PUT`/`DELETE`: es un registro de auditoría inmutable por diseño.
 
 Todos los demás endpoints solo exigen una sesión autenticada (`EMPLEADO` o `ADMIN`); el frontend oculta y bloquea la sección de Usuarios para quien no sea ADMIN, pero la regla real la impone `@PreAuthorize("hasRole('ADMIN')")` en el backend.
 
-## 🚧 Pendientes / mejoras futuras
+## Pendientes / mejoras futuras
 
+- **Imágenes de producto**: hoy `imagenUrl` acepta cualquier URL externa; antes del deploy conviene definir dónde se van a alojar (bucket, CDN, etc.) en vez de depender de links sueltos.
 - **Sin tests automatizados** (unit ni e2e) en frontend ni backend.
 - El frontend no usa aún `/api/productos/paginado`; la lista de productos carga todo con `GET /api/productos`. Si el catálogo crece mucho, migrar a paginación real.
 - `/api/movimientos` no pagina ni ordena — el frontend pide todo y ordena/recorta en el cliente (dashboard y lista). Con mucho volumen, convendría un endpoint paginado/ordenado en el backend.
@@ -180,17 +223,18 @@ Todos los demás endpoints solo exigen una sesión autenticada (`EMPLEADO` o `AD
 - `SecurityConfig` permite CORS desde `http://localhost:4200` y también `http://localhost:62885` — este segundo origen parece residuo de pruebas de una sesión anterior; revisar si sigue siendo necesario.
 - Sin manejo de concurrencia optimista: si dos personas editan el mismo producto o registran movimientos a la vez, gana el último `save()`.
 - Sin recuperación de contraseña propia; solo un ADMIN puede cambiar la contraseña de otro usuario desde el CRUD.
+- Credenciales de `application.properties` en texto plano — antes de desplegar, mover a variables de entorno.
 
-## 🌱 Flujo de trabajo Git
- 
+## Flujo de trabajo Git
+
 Este proyecto sigue buenas prácticas de control de versiones:
- 
+
 - Una rama por funcionalidad (`feature/nombre-corto`)
 - Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`)
 - Pull Request obligatorio antes de mergear a `main`
-## 👤 Autor
- 
+
+## Autor
+
 **Jhon Edwin Olivera Duarte**
 Estudiante de Ingeniería de Sistemas — Universidad de Ibagué
 [GitHub](https://github.com/JhonOlivera) · [LinkedIn](https://linkedin.com/in/jhon-edwin-olivera-duarte-25a05b344)
-
