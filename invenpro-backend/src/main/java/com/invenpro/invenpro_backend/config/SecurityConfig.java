@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     private final UsuarioDetailsService usuarioDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final SpaAuthenticationEntryPoint spaAuthenticationEntryPoint;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -65,7 +66,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/me").authenticated()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(basic -> {});
+                .httpBasic(basic -> basic.authenticationEntryPoint(spaAuthenticationEntryPoint));
 
         return http.build();
     }
