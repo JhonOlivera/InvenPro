@@ -1,1 +1,41 @@
-<p>movimiento-list works!</p>
+<div class="page-header">
+  <h2>Movimientos de inventario</h2>
+  <a routerLink="/movimientos/nuevo" class="btn btn--primary">Registrar movimiento</a>
+</div>
+
+@if (cargando()) {
+  <p class="state-message">Cargando movimientos...</p>
+} @else if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else if (movimientos().length === 0) {
+  <p class="state-message">No hay movimientos registrados todavía.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="mono">ID</th>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th class="mono">Cantidad</th>
+        <th>Usuario</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (movimiento of movimientos(); track movimiento.id) {
+        <tr>
+          <td class="mono">{{ movimiento.id }}</td>
+          <td>{{ movimiento.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ movimiento.productoNombre }}</td>
+          <td>
+            <span class="badge" [class.badge--entrada]="movimiento.tipo === 'ENTRADA'">
+              {{ movimiento.tipo === 'ENTRADA' ? 'Entrada' : 'Salida' }}
+            </span>
+          </td>
+          <td class="mono">{{ movimiento.tipo === 'ENTRADA' ? '+' : '-' }}{{ movimiento.cantidad }}</td>
+          <td>{{ movimiento.usuarioNombre }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
