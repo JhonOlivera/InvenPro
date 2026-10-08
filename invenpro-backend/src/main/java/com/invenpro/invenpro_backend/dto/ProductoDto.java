@@ -42,4 +42,10 @@ public class ProductoDto {
     private Long proveedorId;
 
     private String proveedorNombre;
+
+    @Size(max = 50, message = "El codigo no puede superar los 50 caracteres")
+    private String codigo;
+
+    @Size(max = 500, message = "La URL de la imagen no puede superar los 500 caracteres")
+    private String imagenUrl;
 }
