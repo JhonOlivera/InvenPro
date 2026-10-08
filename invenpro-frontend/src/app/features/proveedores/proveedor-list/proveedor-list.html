@@ -1,1 +1,47 @@
-<p>proveedor-list works!</p>
+<div class="page-header">
+  <h2>Proveedores</h2>
+  <a routerLink="/proveedores/nuevo" class="btn btn--primary">Nuevo proveedor</a>
+</div>
+
+@if (errorEliminar()) {
+  <p class="banner-error">{{ errorEliminar() }}</p>
+}
+
+@if (cargando()) {
+  <p class="state-message">Cargando proveedores...</p>
+} @else if (error()) {
+  <p class="state-message state-message--error">{{ error() }}</p>
+} @else if (proveedores().length === 0) {
+  <p class="state-message">No hay proveedores registrados todavía.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="mono">ID</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (proveedor of proveedores(); track proveedor.id) {
+        <tr>
+          <td class="mono">{{ proveedor.id }}</td>
+          <td>{{ proveedor.nombre }}</td>
+          <td>{{ proveedor.telefono }}</td>
+          <td>{{ proveedor.email }}</td>
+          <td class="table__acciones">
+            <a [routerLink]="['/proveedores', proveedor.id, 'editar']" class="btn btn--sm">Editar</a>
+            <button
+              type="button"
+              class="btn btn--sm btn--danger"
+              [disabled]="eliminandoId() === proveedor.id"
+              (click)="eliminar(proveedor)"
+            >Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

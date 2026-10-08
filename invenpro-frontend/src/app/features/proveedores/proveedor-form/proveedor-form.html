@@ -1,0 +1,41 @@
+<div class="page-header">
+  <h2>{{ modoEdicion ? 'Editar proveedor' : 'Nuevo proveedor' }}</h2>
+</div>
+
+@if (cargando()) {
+  <p class="state-message">Cargando proveedor...</p>
+} @else {
+  <form class="form-card" (ngSubmit)="onSubmit()">
+    @if (errores().length > 0) {
+      <div class="form-errors">
+        <ul>
+          @for (mensaje of errores(); track mensaje) {
+            <li>{{ mensaje }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <label class="form-field">
+      Nombre
+      <input type="text" name="nombre" [(ngModel)]="proveedor.nombre" required maxlength="150" />
+    </label>
+
+    <label class="form-field">
+      Teléfono
+      <input type="text" name="telefono" [(ngModel)]="proveedor.telefono" maxlength="20" />
+    </label>
+
+    <label class="form-field">
+      Email
+      <input type="email" name="email" [(ngModel)]="proveedor.email" maxlength="100" />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <a routerLink="/proveedores" class="btn btn--ghost">Cancelar</a>
+    </div>
+  </form>
+}
