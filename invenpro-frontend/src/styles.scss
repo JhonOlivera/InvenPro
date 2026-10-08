@@ -4,6 +4,16 @@
   --color-text: #242320;
   --color-text-muted: #6B6A64;
   --color-border: rgba(36, 35, 32, 0.12);
+
+  /* Paleta teal (docs/referencia/admin.png) */
+  --color-sidebar: #0B1F26;
+  --color-sidebar-text: rgba(247, 245, 240, 0.65);
+  --color-sidebar-text-active: #F7F5F0;
+  --color-primary: #0E8F8A;
+  --color-banner-from: #0B1F26;
+  --color-banner-to: #0E7C86;
+  --color-price: #1E9E5A;
+
   --color-amber-bg: #FAEEDA;
   --color-amber-text: #633806;
   --color-red-bg: #FCEBEB;
@@ -75,6 +85,17 @@ body {
     padding: 4px 8px;
     font-size: 12px;
   }
+
+  /* Para botones proyectados dentro de app-page-header (fondo con gradiente oscuro). */
+  &--on-dark {
+    background: var(--color-paper);
+    border-color: var(--color-paper);
+    color: var(--color-sidebar);
+
+    &:hover {
+      background: #FFFFFF;
+    }
+  }
 }
 
 /* ---- Patrón compartido: tabla densa ---- */
@@ -99,6 +120,11 @@ body {
 
   td.mono, th.mono {
     font-family: var(--font-mono);
+  }
+
+  td.precio {
+    color: var(--color-price);
+    font-weight: 600;
   }
 
   tbody tr:hover {
@@ -180,6 +206,85 @@ body {
   font-size: 14px;
   color: var(--color-ink);
   margin: 24px 0 10px;
+
+  &__contador {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+}
+
+/* ---- Patrón compartido: barra de herramientas de un listado (contador + buscador) ---- */
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0 10px;
+}
+
+.search-input {
+  padding: 7px 12px;
+  border: 0.5px solid var(--color-border);
+  font-size: 13px;
+  font-family: inherit;
+  background: #FFFFFF;
+  color: var(--color-text);
+  width: 280px;
+  max-width: 100%;
+}
+
+/* ---- Patrón compartido: pills (código, categoría) ---- */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: var(--color-border);
+  color: var(--color-text);
+
+  &--mono {
+    font-family: var(--font-mono);
+    background: rgba(36, 35, 32, 0.06);
+    color: var(--color-text-muted);
+  }
+
+  &--teal {
+    background: rgba(14, 143, 138, 0.12);
+    color: var(--color-primary);
+  }
+}
+
+/* ---- Patrón compartido: celda de stock (cantidad + badge de estado) ---- */
+.celda-stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- Patrón compartido: celda de producto (nombre + descripción) ---- */
+.celda-producto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  &__nombre {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  &__descripcion {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.text-muted {
+  color: var(--color-text-muted);
 }
 
 /* ---- Patrón compartido: badge de estado (stock, etc.) ---- */

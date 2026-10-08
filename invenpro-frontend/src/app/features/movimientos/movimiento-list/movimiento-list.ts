@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { MovimientoService } from '../movimiento.service';
 import { Movimiento } from '../../../shared/models/movimiento.model';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-movimiento-list',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, PageHeader],
   templateUrl: './movimiento-list.html',
   styleUrl: './movimiento-list.scss'
 })

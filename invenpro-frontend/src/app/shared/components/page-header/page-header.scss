@@ -1,0 +1,44 @@
+.page-banner {
+  background: linear-gradient(135deg, var(--color-banner-from), var(--color-banner-to));
+  color: var(--color-paper);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+
+  &__eyebrow {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(247, 245, 240, 0.7);
+    margin-bottom: 8px;
+  }
+
+  &__fila {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__titulo {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-paper);
+  }
+
+  &__descripcion {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(247, 245, 240, 0.8);
+    max-width: 560px;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}

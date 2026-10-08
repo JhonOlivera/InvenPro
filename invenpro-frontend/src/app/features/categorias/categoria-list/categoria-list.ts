@@ -4,11 +4,12 @@ import { CategoriaService } from '../categoria.service';
 import { Categoria } from '../../../shared/models/categoria.model';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-categoria-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeader],
   templateUrl: './categoria-list.html',
   styleUrl: './categoria-list.scss'
 })

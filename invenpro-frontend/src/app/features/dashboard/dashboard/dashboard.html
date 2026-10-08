@@ -1,6 +1,8 @@
-<div class="page-header">
-  <h2>Dashboard</h2>
-</div>
+<app-page-header
+  eyebrow="Resumen general"
+  titulo="Dashboard"
+  descripcion="Vista general del inventario: productos, proveedores, stock bajo y movimientos recientes."
+></app-page-header>
 
 @if (errorResumen()) {
   <p class="banner-error">{{ errorResumen() }}</p>

@@ -8,13 +8,14 @@ import { Producto } from '../../../shared/models/producto.model';
 import { Movimiento } from '../../../shared/models/movimiento.model';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
 import { calcularEstadoStock, ETIQUETA_ESTADO_STOCK, EstadoStock } from '../../../shared/utils/stock.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
 
 const MOVIMIENTOS_RECIENTES = 5;
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, PageHeader],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

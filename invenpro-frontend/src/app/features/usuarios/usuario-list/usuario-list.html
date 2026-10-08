@@ -1,7 +1,10 @@
-<div class="page-header">
-  <h2>Usuarios</h2>
-  <a routerLink="/usuarios/nuevo" class="btn btn--primary">Nuevo usuario</a>
-</div>
+<app-page-header
+  eyebrow="Sistema"
+  titulo="Usuarios"
+  descripcion="Administra las cuentas con acceso al sistema."
+>
+  <a routerLink="/usuarios/nuevo" class="btn btn--on-dark">Nuevo usuario</a>
+</app-page-header>
 
 @if (errorEliminar()) {
   <p class="banner-error">{{ errorEliminar() }}</p>

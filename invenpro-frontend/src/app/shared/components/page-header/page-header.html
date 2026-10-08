@@ -1,0 +1,16 @@
+<header class="page-banner">
+  @if (eyebrow()) {
+    <span class="page-banner__eyebrow">{{ eyebrow() }}</span>
+  }
+  <div class="page-banner__fila">
+    <div class="page-banner__texto">
+      <h2 class="page-banner__titulo">{{ titulo() }}</h2>
+      @if (descripcion()) {
+        <p class="page-banner__descripcion">{{ descripcion() }}</p>
+      }
+    </div>
+    <div class="page-banner__acciones">
+      <ng-content />
+    </div>
+  </div>
+</header>

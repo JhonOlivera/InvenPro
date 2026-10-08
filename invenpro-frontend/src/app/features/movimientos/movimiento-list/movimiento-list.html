@@ -1,7 +1,10 @@
-<div class="page-header">
-  <h2>Movimientos de inventario</h2>
-  <a routerLink="/movimientos/nuevo" class="btn btn--primary">Registrar movimiento</a>
-</div>
+<app-page-header
+  eyebrow="Inventario"
+  titulo="Movimientos de inventario"
+  descripcion="Historial de entradas y salidas de stock."
+>
+  <a routerLink="/movimientos/nuevo" class="btn btn--on-dark">Registrar movimiento</a>
+</app-page-header>
 
 @if (cargando()) {
   <p class="state-message">Cargando movimientos...</p>

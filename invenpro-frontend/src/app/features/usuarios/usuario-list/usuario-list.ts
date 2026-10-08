@@ -5,11 +5,12 @@ import { Usuario } from '../../../shared/models/usuario.model';
 import { AuthService } from '../../../core/shell/service/auth.service';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-usuario-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeader],
   templateUrl: './usuario-list.html',
   styleUrl: './usuario-list.scss'
 })
