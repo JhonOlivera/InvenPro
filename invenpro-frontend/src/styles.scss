@@ -22,3 +22,242 @@ body {
   background: var(--color-paper);
   color: var(--color-text);
 }
+
+/* ---- Patrón compartido: encabezado de página con acción principal ---- */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-ink);
+  }
+}
+
+/* ---- Patrón compartido: botones ---- */
+.btn {
+  padding: 8px 14px;
+  font-size: 13px;
+  border: 0.5px solid var(--color-border);
+  background: #FFFFFF;
+  color: var(--color-text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  &--danger {
+    background: var(--color-red-text);
+    border-color: var(--color-red-text);
+    color: var(--color-paper);
+  }
+
+  &--ghost {
+    background: transparent;
+  }
+
+  &--sm {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+/* ---- Patrón compartido: tabla densa ---- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 0.5px solid var(--color-border);
+  }
+
+  th {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  td.mono, th.mono {
+    font-family: var(--font-mono);
+  }
+
+  tbody tr:hover {
+    background: rgba(28, 37, 48, 0.03);
+  }
+
+  .table__acciones {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+}
+
+/* ---- Patrón compartido: mensajes de estado (carga/vacío/error) ---- */
+.state-message {
+  padding: 24px 10px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+
+  &--error {
+    color: var(--color-red-text);
+  }
+
+  &--success {
+    color: var(--color-green-text);
+  }
+}
+
+/* ---- Patrón compartido: banner de error (ej. fallo al eliminar) ---- */
+.banner-error {
+  background: var(--color-red-bg);
+  color: var(--color-red-text);
+  border: 0.5px solid var(--color-red-text);
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+/* ---- Patrón compartido: tarjetas de estadística (dashboard) ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #FFFFFF;
+  border: 0.5px solid var(--color-border);
+  padding: 16px;
+
+  &__valor {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    color: var(--color-ink);
+    display: block;
+  }
+
+  &__etiqueta {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Reservado para la tarjeta de alertas de stock bajo cuando hay > 0. */
+  &--amber {
+    background: var(--color-amber-bg);
+    border-color: var(--color-amber-text);
+
+    .stat-card__valor,
+    .stat-card__etiqueta {
+      color: var(--color-amber-text);
+    }
+  }
+}
+
+.section-title {
+  font-size: 14px;
+  color: var(--color-ink);
+  margin: 24px 0 10px;
+}
+
+/* ---- Patrón compartido: badge de estado (stock, etc.) ---- */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  border: 0.5px solid var(--color-border);
+  color: var(--color-text-muted);
+
+  &--amber {
+    background: var(--color-amber-bg);
+    color: var(--color-amber-text);
+    border-color: var(--color-amber-text);
+  }
+
+  &--red {
+    background: var(--color-red-bg);
+    color: var(--color-red-text);
+    border-color: var(--color-red-text);
+  }
+
+  &--entrada {
+    background: rgba(59, 109, 17, 0.08);
+    color: var(--color-green-text);
+    border-color: var(--color-green-text);
+  }
+}
+
+/* ---- Patrón compartido: formularios de alta/edición ---- */
+.form-card {
+  background: #FFFFFF;
+  border: 0.5px solid var(--color-border);
+  padding: 24px;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+
+  input, textarea, select {
+    padding: 8px 10px;
+    border: 0.5px solid var(--color-border);
+    font-size: 14px;
+    font-family: inherit;
+    background: #FFFFFF;
+    color: var(--color-text);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 64px;
+  }
+}
+
+.form-errors {
+  background: var(--color-red-bg);
+  color: var(--color-red-text);
+  border: 0.5px solid var(--color-red-text);
+  padding: 10px 14px;
+  font-size: 13px;
+  margin: 0;
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}

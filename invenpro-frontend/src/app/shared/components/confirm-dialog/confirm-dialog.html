@@ -1,0 +1,17 @@
+@if (dialogo(); as d) {
+  <div class="confirm-overlay" (click)="cancelar()">
+    <div class="confirm-card" (click)="$event.stopPropagation()">
+      <h2 class="confirm-card__titulo">{{ d.titulo }}</h2>
+      <p class="confirm-card__mensaje">{{ d.mensaje }}</p>
+      <div class="confirm-card__acciones">
+        <button type="button" class="btn btn--ghost" (click)="cancelar()">{{ d.textoCancelar }}</button>
+        <button
+          type="button"
+          class="btn"
+          [class.btn--danger]="d.peligro"
+          (click)="confirmar()"
+        >{{ d.textoConfirmar }}</button>
+      </div>
+    </div>
+  </div>
+}
