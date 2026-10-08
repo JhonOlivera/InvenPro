@@ -1,7 +1,10 @@
-<div class="page-header">
-  <h2>Proveedores</h2>
-  <a routerLink="/proveedores/nuevo" class="btn btn--primary">Nuevo proveedor</a>
-</div>
+<app-page-header
+  eyebrow="Catálogo"
+  titulo="Proveedores"
+  descripcion="Gestiona los proveedores registrados en el sistema."
+>
+  <a routerLink="/proveedores/nuevo" class="btn btn--on-dark">Nuevo proveedor</a>
+</app-page-header>
 
 @if (errorEliminar()) {
   <p class="banner-error">{{ errorEliminar() }}</p>
@@ -14,34 +17,50 @@
 } @else if (proveedores().length === 0) {
   <p class="state-message">No hay proveedores registrados todavía.</p>
 } @else {
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="mono">ID</th>
-        <th>Nombre</th>
-        <th>Teléfono</th>
-        <th>Email</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (proveedor of proveedores(); track proveedor.id) {
+  <div class="list-toolbar">
+    <h3 class="section-title">
+      Listado <span class="section-title__contador">({{ proveedoresFiltrados().length }} proveedores)</span>
+    </h3>
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Buscar por nombre o email..."
+      [(ngModel)]="busqueda"
+    />
+  </div>
+
+  @if (proveedoresFiltrados().length === 0) {
+    <p class="state-message">Ningún proveedor coincide con "{{ busqueda() }}".</p>
+  } @else {
+    <table class="table">
+      <thead>
         <tr>
-          <td class="mono">{{ proveedor.id }}</td>
-          <td>{{ proveedor.nombre }}</td>
-          <td>{{ proveedor.telefono }}</td>
-          <td>{{ proveedor.email }}</td>
-          <td class="table__acciones">
-            <a [routerLink]="['/proveedores', proveedor.id, 'editar']" class="btn btn--sm">Editar</a>
-            <button
-              type="button"
-              class="btn btn--sm btn--danger"
-              [disabled]="eliminandoId() === proveedor.id"
-              (click)="eliminar(proveedor)"
-            >Eliminar</button>
-          </td>
+          <th class="mono">ID</th>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th></th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (proveedor of proveedoresFiltrados(); track proveedor.id) {
+          <tr>
+            <td class="mono">{{ proveedor.id }}</td>
+            <td>{{ proveedor.nombre }}</td>
+            <td>{{ proveedor.telefono }}</td>
+            <td>{{ proveedor.email }}</td>
+            <td class="table__acciones">
+              <a [routerLink]="['/proveedores', proveedor.id, 'editar']" class="btn btn--sm">Editar</a>
+              <button
+                type="button"
+                class="btn btn--sm btn--danger"
+                [disabled]="eliminandoId() === proveedor.id"
+                (click)="eliminar(proveedor)"
+              >Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 }

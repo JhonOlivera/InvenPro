@@ -1,14 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ProveedorService } from '../proveedor.service';
 import { Proveedor } from '../../../shared/models/proveedor.model';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-proveedor-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule, PageHeader],
   templateUrl: './proveedor-list.html',
   styleUrl: './proveedor-list.scss'
 })
@@ -21,6 +23,18 @@ export class ProveedorList implements OnInit {
   error = signal<string | null>(null);
   errorEliminar = signal<string | null>(null);
   eliminandoId = signal<number | null>(null);
+  busqueda = signal('');
+
+  proveedoresFiltrados = computed(() => {
+    const termino = this.busqueda().trim().toLowerCase();
+    if (!termino) {
+      return this.proveedores();
+    }
+    return this.proveedores().filter((proveedor) =>
+      proveedor.nombre.toLowerCase().includes(termino) ||
+      (proveedor.email ?? '').toLowerCase().includes(termino)
+    );
+  });
 
   ngOnInit() {
     this.cargar();

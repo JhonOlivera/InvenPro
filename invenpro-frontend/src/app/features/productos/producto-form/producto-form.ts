@@ -9,11 +9,12 @@ import { Producto } from '../../../shared/models/producto.model';
 import { Categoria } from '../../../shared/models/categoria.model';
 import { Proveedor } from '../../../shared/models/proveedor.model';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
+import { ImageFallback } from '../../../shared/components/image-fallback/image-fallback';
 
 @Component({
   selector: 'app-producto-form',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, ImageFallback],
   templateUrl: './producto-form.html',
   styleUrl: './producto-form.scss'
 })
@@ -34,7 +35,9 @@ export class ProductoForm implements OnInit {
     stock: 0,
     stockMinimo: 0,
     categoriaId: 0,
-    proveedorId: 0
+    proveedorId: 0,
+    codigo: '',
+    imagenUrl: ''
   };
 
   categorias = signal<Categoria[]>([]);

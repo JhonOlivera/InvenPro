@@ -1,16 +1,19 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ProductoService } from '../producto.service';
 import { Producto } from '../../../shared/models/producto.model';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { obtenerMensajesError } from '../../../shared/utils/http-error.util';
 import { calcularEstadoStock, ETIQUETA_ESTADO_STOCK, EstadoStock } from '../../../shared/utils/stock.util';
+import { PageHeader } from '../../../shared/components/page-header/page-header';
+import { ImageFallback } from '../../../shared/components/image-fallback/image-fallback';
 
 @Component({
   selector: 'app-producto-list',
   standalone: true,
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, FormsModule, PageHeader, ImageFallback],
   templateUrl: './producto-list.html',
   styleUrl: './producto-list.scss'
 })
@@ -23,6 +26,19 @@ export class ProductoList implements OnInit {
   error = signal<string | null>(null);
   errorEliminar = signal<string | null>(null);
   eliminandoId = signal<number | null>(null);
+  busqueda = signal('');
+
+  productosFiltrados = computed(() => {
+    const termino = this.busqueda().trim().toLowerCase();
+    if (!termino) {
+      return this.productos();
+    }
+    return this.productos().filter((producto) =>
+      producto.nombre.toLowerCase().includes(termino) ||
+      (producto.codigo ?? '').toLowerCase().includes(termino) ||
+      (producto.categoriaNombre ?? '').toLowerCase().includes(termino)
+    );
+  });
 
   ngOnInit() {
     this.cargar();

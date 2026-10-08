@@ -9,4 +9,6 @@ export interface Producto {
   categoriaNombre?: string;
   proveedorId: number;
   proveedorNombre?: string;
+  codigo?: string;
+  imagenUrl?: string;
 }

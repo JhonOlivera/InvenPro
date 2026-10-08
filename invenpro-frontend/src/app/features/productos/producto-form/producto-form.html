@@ -22,9 +22,24 @@
     </label>
 
     <label class="form-field">
+      Código
+      <input type="text" name="codigo" [(ngModel)]="producto.codigo" maxlength="50" />
+    </label>
+
+    <label class="form-field">
       Descripción
       <textarea name="descripcion" [(ngModel)]="producto.descripcion" maxlength="255"></textarea>
     </label>
+
+    <label class="form-field">
+      URL de la imagen
+      <input type="text" name="imagenUrl" [(ngModel)]="producto.imagenUrl" maxlength="500" placeholder="https://..." />
+    </label>
+
+    <div class="form-field">
+      Vista previa
+      <app-image-fallback [src]="producto.imagenUrl" [alt]="producto.nombre" tamano="lg" />
+    </div>
 
     <label class="form-field">
       Categoría
