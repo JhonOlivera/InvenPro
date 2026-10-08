@@ -1,1 +1,101 @@
-<p>dashboard works!</p>
+<div class="page-header">
+  <h2>Dashboard</h2>
+</div>
+
+@if (errorResumen()) {
+  <p class="banner-error">{{ errorResumen() }}</p>
+}
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-card__valor">{{ totalProductos() ?? '—' }}</span>
+    <span class="stat-card__etiqueta">Productos</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card__valor">{{ totalProveedores() ?? '—' }}</span>
+    <span class="stat-card__etiqueta">Proveedores</span>
+  </div>
+  <div class="stat-card" [class.stat-card--amber]="stockBajo().length > 0">
+    <span class="stat-card__valor">{{ stockBajo().length }}</span>
+    <span class="stat-card__etiqueta">Stock bajo</span>
+  </div>
+</div>
+
+<h3 class="section-title">Productos con stock bajo</h3>
+@if (cargandoStockBajo()) {
+  <p class="state-message">Cargando...</p>
+} @else if (errorStockBajo()) {
+  <p class="state-message state-message--error">{{ errorStockBajo() }}</p>
+} @else if (stockBajo().length === 0) {
+  <p class="state-message">Ningún producto está por debajo de su stock mínimo.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th class="mono">Stock</th>
+        <th class="mono">Stock mínimo</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (producto of stockBajo(); track producto.id) {
+        <tr>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.categoriaNombre }}</td>
+          <td class="mono">{{ producto.stock }}</td>
+          <td class="mono">{{ producto.stockMinimo }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.badge--amber]="estadoStock(producto) === 'bajo'"
+              [class.badge--red]="estadoStock(producto) === 'agotado'"
+            >{{ etiquetaEstadoStock(producto) }}</span>
+          </td>
+          <td class="table__acciones">
+            <a [routerLink]="['/productos', producto.id, 'editar']" class="btn btn--sm">Reabastecer</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+<h3 class="section-title">Movimientos recientes</h3>
+@if (cargandoMovimientos()) {
+  <p class="state-message">Cargando...</p>
+} @else if (errorMovimientos()) {
+  <p class="state-message state-message--error">{{ errorMovimientos() }}</p>
+} @else if (movimientosRecientes().length === 0) {
+  <p class="state-message">No hay movimientos registrados todavía.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th class="mono">Cantidad</th>
+        <th>Usuario</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (movimiento of movimientosRecientes(); track movimiento.id) {
+        <tr>
+          <td>{{ movimiento.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ movimiento.productoNombre }}</td>
+          <td>
+            <span class="badge" [class.badge--entrada]="movimiento.tipo === 'ENTRADA'">
+              {{ movimiento.tipo === 'ENTRADA' ? 'Entrada' : 'Salida' }}
+            </span>
+          </td>
+          <td class="mono">{{ movimiento.tipo === 'ENTRADA' ? '+' : '-' }}{{ movimiento.cantidad }}</td>
+          <td>{{ movimiento.usuarioNombre }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <a routerLink="/movimientos" class="btn btn--ghost btn--sm">Ver todos los movimientos</a>
+}
